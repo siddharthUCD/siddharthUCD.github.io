@@ -640,7 +640,7 @@
                 <li><a href="#journey">Journey</a></li>
                 <li><a href="#skills">Skills</a></li>
             </ul>
-            <button class="chat-toggle" onclick="toggleChat()">💬 Ask About Me</button>
+            <button class="chat-toggle" onclick="openCareerConversationist()">💬 Talk to my assistant/button>
         </div>
     </nav>
 
@@ -938,7 +938,7 @@
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
-                <p>Hi! I'm Siddharth's AI assistant powered by my career conversationist. Ask me anything about my experience, skills, projects, or career journey! 🚀</p>
+                <p>Hi! I'm Siddharth's AI assistant. Click the "💬 Ask About Me" button in the navigation to open my full AI interface! 🚀</p>
             </div>
         </div>
         <div class="chat-input">
@@ -995,6 +995,20 @@
         // Chat functionality
         let useIframeMode = false; // Flag to track if we're using iframe mode
         
+        function openCareerConversationist() {
+            // Open career conversationist in new window
+            const gradioWindow = window.open(
+                'https://huggingface.co/spaces/albinoG123rt/career_conversationist',
+                'CareerConversationist',
+                'width=900,height=700,scrollbars=yes,resizable=yes,menubar=no,toolbar=no,location=no,status=no'
+            );
+            
+            // Focus the new window
+            if (gradioWindow) {
+                gradioWindow.focus();
+            }
+        }
+        
         function toggleChat() {
             const chatContainer = document.getElementById('chatContainer');
             chatContainer.classList.toggle('active');
@@ -1027,102 +1041,12 @@
             // Show typing indicator
             const typingIndicator = addTypingIndicator();
 
-            // Since Hugging Face blocks CORS proxies, go straight to iframe mode
+            // Use local responses for the chat interface
             setTimeout(() => {
                 removeTypingIndicator(typingIndicator);
-                if (!useIframeMode) {
-                    console.log('Switching to iframe mode for Hugging Face Spaces');
-                    switchToIframeMode();
-                } else {
-                    // Fallback to local responses if iframe also fails
-                    const response = generateResponse(message.toLowerCase());
-                    addMessage(response, 'bot');
-                }
+                const response = generateResponse(message.toLowerCase());
+                addMessage(response, 'bot');
             }, 1000);
-        }
-
-        function switchToIframeMode() {
-            useIframeMode = true;
-            const chatMessages = document.getElementById('chatMessages');
-            const chatInput = document.querySelector('.chat-input');
-            
-            // Clear existing messages and add loading message
-            chatMessages.innerHTML = '<div class="message bot"><p>🔄 Loading my AI assistant...</p></div>';
-            
-            // Add iframe after a brief delay for smooth transition
-            setTimeout(() => {
-                chatMessages.innerHTML = '';
-                
-                // Add iframe
-                const iframe = document.createElement('iframe');
-                iframe.id = 'gradioIframe';
-                iframe.src = 'https://huggingface.co/spaces/albinoG123rt/career_conversationist';
-                iframe.style.width = '100%';
-                iframe.style.height = '400px';
-                iframe.style.border = 'none';
-                iframe.style.borderRadius = '10px';
-                iframe.style.background = 'var(--secondary-bg)';
-                iframe.style.marginTop = '10px';
-                
-                chatMessages.appendChild(iframe);
-                
-                // Hide the input since iframe has its own
-                chatInput.style.display = 'none';
-                
-                // Update header
-                const header = document.querySelector('.chat-header span');
-                header.textContent = '💬 Career Conversationist (Embedded)';
-            }, 500);
-        }
-
-        // Configuration for your Gradio service
-        const GRADIO_API_URL = 'https://cors-anywhere.herokuapp.com/https://huggingface.co/spaces/albinoG123rt/career_conversationist'; // Using CORS proxy
-        const GRADIO_API_ENDPOINT = '/api/predict'; // Standard Gradio API endpoint
-        
-        // Alternative CORS proxies if the above doesn't work:
-        // const GRADIO_API_URL = 'https://api.allorigins.win/raw?url=https://huggingface.co/spaces/albinoG123rt/career_conversationist';
-        // const GRADIO_API_URL = 'https://thingproxy.freeboard.io/fetch/https://huggingface.co/spaces/albinoG123rt/career_conversationist';
-
-        async function callGradioAPI(message) {
-            // For Hugging Face Spaces, we need to handle the API structure properly
-            const requestData = {
-                data: [message], // Single message input
-                fn_index: 0 // Usually 0 for the first function in the interface
-            };
-
-            try {
-                const response = await fetch(GRADIO_API_URL + GRADIO_API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                
-                // Handle different response formats from Hugging Face Spaces
-                if (result.data && Array.isArray(result.data)) {
-                    // Standard Gradio response format
-                    return result.data[0] || result.data || 'No response from AI service';
-                } else if (result.response) {
-                    // Alternative response format
-                    return result.response;
-                } else if (typeof result === 'string') {
-                    // Direct string response
-                    return result;
-                } else {
-                    // Fallback
-                    return JSON.stringify(result) || 'No response from AI service';
-                }
-            } catch (error) {
-                console.error('Error calling Gradio API:', error);
-                throw error;
-            }
         }
 
         function addTypingIndicator() {
