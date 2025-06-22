@@ -545,6 +545,22 @@
             transform: scale(1.1);
         }
 
+        /* Typing indicator styling */
+        .typing-indicator {
+            opacity: 0.7;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .typing-indicator p {
+            margin: 0;
+            font-style: italic;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
@@ -631,9 +647,9 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Siddharth Dinesh</h1>
+            <h1>Siddharth</h1>
             <div class="subtitle">Software Development Engineer II @ Microsoft</div>
-            <div class="tagline">Stamp 4 | Typing for a living | Currently typing at Microsoft Dublin</div>
+            <div class="tagline">Typing for a living | Currently typing at Microsoft in Dublin</div>
             <div class="cta-buttons">
                 <a href="#projects" class="btn btn-primary">View My Work</a>
                 <a href="https://linkedin.com/in/siddharthdinesh17" class="btn btn-secondary" target="_blank">Connect on LinkedIn</a>
@@ -663,7 +679,7 @@
                     <div>Team Members Led</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">3.9</div>
+                    <div class="stat-number">4.0</div>
                     <div>Masters GPA</div>
                 </div>
             </div>
@@ -922,7 +938,7 @@
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
-                <p>Hi! I'm Siddharth's AI assistant. Ask me anything about his experience, skills, projects, or career journey! 🚀</p>
+                <p>Hi! I'm Siddharth's AI assistant powered by my career conversationist. Ask me anything about my experience, skills, projects, or career journey! 🚀</p>
             </div>
         </div>
         <div class="chat-input">
@@ -977,11 +993,19 @@
         });
 
         // Chat functionality
+        let useIframeMode = false; // Flag to track if we're using iframe mode
+        
         function toggleChat() {
             const chatContainer = document.getElementById('chatContainer');
             chatContainer.classList.toggle('active');
             if (chatContainer.classList.contains('active')) {
-                document.getElementById('chatInput').focus();
+                if (useIframeMode) {
+                    // If in iframe mode, focus the iframe
+                    const iframe = document.getElementById('gradioIframe');
+                    if (iframe) iframe.focus();
+                } else {
+                    document.getElementById('chatInput').focus();
+                }
             }
         }
 
@@ -1000,11 +1024,121 @@
             addMessage(message, 'user');
             input.value = '';
 
-            // Simulate typing delay and add bot response
+            // Show typing indicator
+            const typingIndicator = addTypingIndicator();
+
+            // Since Hugging Face blocks CORS proxies, go straight to iframe mode
             setTimeout(() => {
-                const response = generateResponse(message.toLowerCase());
-                addMessage(response, 'bot');
+                removeTypingIndicator(typingIndicator);
+                if (!useIframeMode) {
+                    console.log('Switching to iframe mode for Hugging Face Spaces');
+                    switchToIframeMode();
+                } else {
+                    // Fallback to local responses if iframe also fails
+                    const response = generateResponse(message.toLowerCase());
+                    addMessage(response, 'bot');
+                }
             }, 1000);
+        }
+
+        function switchToIframeMode() {
+            useIframeMode = true;
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.querySelector('.chat-input');
+            
+            // Clear existing messages and add loading message
+            chatMessages.innerHTML = '<div class="message bot"><p>🔄 Loading my AI assistant...</p></div>';
+            
+            // Add iframe after a brief delay for smooth transition
+            setTimeout(() => {
+                chatMessages.innerHTML = '';
+                
+                // Add iframe
+                const iframe = document.createElement('iframe');
+                iframe.id = 'gradioIframe';
+                iframe.src = 'https://huggingface.co/spaces/albinoG123rt/career_conversationist';
+                iframe.style.width = '100%';
+                iframe.style.height = '400px';
+                iframe.style.border = 'none';
+                iframe.style.borderRadius = '10px';
+                iframe.style.background = 'var(--secondary-bg)';
+                iframe.style.marginTop = '10px';
+                
+                chatMessages.appendChild(iframe);
+                
+                // Hide the input since iframe has its own
+                chatInput.style.display = 'none';
+                
+                // Update header
+                const header = document.querySelector('.chat-header span');
+                header.textContent = '💬 Career Conversationist (Embedded)';
+            }, 500);
+        }
+
+        // Configuration for your Gradio service
+        const GRADIO_API_URL = 'https://cors-anywhere.herokuapp.com/https://huggingface.co/spaces/albinoG123rt/career_conversationist'; // Using CORS proxy
+        const GRADIO_API_ENDPOINT = '/api/predict'; // Standard Gradio API endpoint
+        
+        // Alternative CORS proxies if the above doesn't work:
+        // const GRADIO_API_URL = 'https://api.allorigins.win/raw?url=https://huggingface.co/spaces/albinoG123rt/career_conversationist';
+        // const GRADIO_API_URL = 'https://thingproxy.freeboard.io/fetch/https://huggingface.co/spaces/albinoG123rt/career_conversationist';
+
+        async function callGradioAPI(message) {
+            // For Hugging Face Spaces, we need to handle the API structure properly
+            const requestData = {
+                data: [message], // Single message input
+                fn_index: 0 // Usually 0 for the first function in the interface
+            };
+
+            try {
+                const response = await fetch(GRADIO_API_URL + GRADIO_API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                // Handle different response formats from Hugging Face Spaces
+                if (result.data && Array.isArray(result.data)) {
+                    // Standard Gradio response format
+                    return result.data[0] || result.data || 'No response from AI service';
+                } else if (result.response) {
+                    // Alternative response format
+                    return result.response;
+                } else if (typeof result === 'string') {
+                    // Direct string response
+                    return result;
+                } else {
+                    // Fallback
+                    return JSON.stringify(result) || 'No response from AI service';
+                }
+            } catch (error) {
+                console.error('Error calling Gradio API:', error);
+                throw error;
+            }
+        }
+
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing-indicator';
+            typingDiv.innerHTML = '<p>🤖 AI is thinking...</p>';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        function removeTypingIndicator(typingIndicator) {
+            if (typingIndicator && typingIndicator.parentNode) {
+                typingIndicator.parentNode.removeChild(typingIndicator);
+            }
         }
 
         function addMessage(text, sender) {
@@ -1016,49 +1150,28 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        // Fallback function for when Gradio is not available
         function generateResponse(message) {
-            // Simple keyword-based responses - in a real implementation, you'd use a proper AI/NLP service
+            // Keep your existing response logic as fallback
             const responses = {
-                // Experience and Career
                 experience: "I have 7+ years of professional software development experience, starting from my internship at Uniq Technologies in 2015 to my current role as Software Development Engineer II at Microsoft. I've worked across multiple domains including fintech at Mastercard, e-commerce at Groupon, and now cloud services at Microsoft.",
-                
                 microsoft: "I joined Microsoft Dublin in February 2025 as a Software Development Engineer II. I work on Azure Confidential Ledger, a blockchain-based solution for immutable auditing. I'm also incorporating AI Co-Pilot experiences across Azure products and work with technologies like React, C#, .NET Core, Cosmos DB, Python, and C++.",
-                
                 mastercard: "At Mastercard (2022-2025), I was a Senior Software Development Engineer leading a team of 5 developers and 2 QA engineers. I worked on the Rebates platform, helping banks manage their rebate contracts, accruals, and payouts. I incorporated architectural components to improve scalability and reliability.",
-                
                 capgemini: "I spent almost 4 years at Capgemini (2017-2021) in Mumbai, progressing from Software Engineer to Associate Consultant. I developed multiple full-scale web applications, managed junior developers, and automated business processes, reducing turnaround time by up to 80%.",
-                
-                // Education
                 education: "I have a Master's in Computer Science from University College Dublin (2021-2022) with a 3.9 GPA, specializing in Distributed Systems, Cloud Computing, and Programming with Scala. My Bachelor's is in Computer Science from Saveetha University, India (2013-2017) with First Class distinction.",
-                
                 dublin: "I moved to Dublin, Ireland in 2021 for my Master's degree at UCD and have been working here since. I have Stamp 4 permission and am currently at Microsoft Dublin. Dublin has been an amazing place for my career growth in tech!",
-                
-                // Technical Skills
                 skills: "My core technical skills include C#, .NET Core, React, Python, Java, SQL Server, Azure, AWS, Docker, and Kubernetes. I'm experienced in full-stack development, cloud computing, distributed systems, and team leadership. I work with both frontend (React, Vue.js, Angular) and backend (.NET Core, Web APIs) technologies.",
-                
                 dotnet: "I'm highly experienced in .NET ecosystem - .NET Core, ASP.NET, MVC, Web API, and C#. I've been working with .NET for over 7 years, building scalable web applications, APIs, and enterprise solutions across multiple companies.",
-                
                 react: "I work extensively with React for frontend development, especially in my current role at Microsoft for Azure portal experiences. I also have experience with React Native for mobile development and other frontend frameworks like Vue.js and Angular.",
-                
                 azure: "I currently work with Azure technologies at Microsoft, specifically on Azure Confidential Ledger. I have experience with various Azure services including Cosmos DB, and I'm incorporating AI Co-Pilot experiences into Azure products.",
-                
-                // Projects
                 projects: "Some of my notable projects include Azure Confidential Ledger (Microsoft), Rebates Platform (Mastercard), Automated CV Extract system processing 500+ daily extractions (Capgemini), and EM Portal managing 5000+ daily requests. I've also worked on ML projects like Fake News Detector using AWS.",
-                
                 leadership: "I have strong leadership experience, having led a team of 5 developers and 2 QA engineers at Mastercard. At Capgemini, I mentored 3 junior developers while delivering complex projects. I'm experienced in Agile methodologies, sprint planning, and stakeholder management.",
-                
-                // Personal
                 contact: "You can reach me at siddharth17apr96@gmail.com or connect with me on LinkedIn at linkedin.com/in/siddharthdinesh17. I'm always open to discussing new opportunities and tech collaborations!",
-                
                 github: "You can check out my work on GitHub at github.com/SiddharthUCD where I showcase various projects and contributions.",
-                
-                // Default responses
                 default: "That's a great question! I'm a Software Development Engineer with 7+ years of experience, currently working at Microsoft Dublin. I specialize in full-stack development, cloud technologies, and team leadership. Feel free to ask me about my experience, skills, projects, or career journey!",
-                
                 greeting: "Hello! Thanks for your interest in learning about me. I'm Siddharth, a Software Development Engineer II at Microsoft Dublin with 7+ years of experience in full-stack development. What would you like to know about my background, skills, or projects?"
             };
 
-            // Check for keywords and return appropriate response
             if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
                 return responses.greeting;
             } else if (message.includes('microsoft') || message.includes('current job') || message.includes('current role')) {
@@ -1083,6 +1196,8 @@
                 return responses.azure;
             } else if (message.includes('projects') || message.includes('work') || message.includes('portfolio')) {
                 return responses.projects;
+            } else if (message.includes('education') || message.includes('degree') || message.includes('university') || message.includes('ucd')) {
+                return responses.education;
             } else if (message.includes('leadership') || message.includes('team') || message.includes('management')) {
                 return responses.leadership;
             } else if (message.includes('contact') || message.includes('email') || message.includes('reach')) {
