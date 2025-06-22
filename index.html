@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siddharth Dinesh - Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --accent-cyan: #00f5ff;
+            --accent-green: #00ff88;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape-1 { width: 60px; height: 60px; top: 20%; left: 10%; animation-delay: 0s; }
+        .shape-2 { width: 80px; height: 80px; top: 60%; right: 20%; animation-delay: 2s; }
+        .shape-3 { width: 40px; height: 40px; bottom: 30%; left: 30%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Chat Toggle Button */
+        .chat-toggle {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 25px;
+            color: var(--primary-bg);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+
+        .chat-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(0, 245, 255, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 245, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.2rem;
+            color: var(--accent-green);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            color: var(--primary-bg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 245, 255, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.2);
+        }
+
+        .project-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(0, 255, 136, 0.1));
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+        }
+
+        .project-company {
+            color: var(--accent-green);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            padding: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(0, 245, 255, 0.2);
+            color: var(--accent-cyan);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+        }
+
+        /* Journey Section */
+        .journey-timeline {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-green));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-green));
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-period {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.2);
+        }
+
+        .skill-category h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .skill-item {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        /* AI Chat Section */
+        .chat-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 400px;
+            height: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: var(--primary-bg);
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--primary-bg);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: var(--primary-bg);
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: var(--secondary-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 25px;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 50%;
+            color: var(--primary-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .chat-container {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">SD</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#journey">Journey</a></li>
+                <li><a href="#skills">Skills</a></li>
+            </ul>
+            <button class="chat-toggle" onclick="toggleChat()">💬 Ask About Me</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Siddharth Dinesh</h1>
+            <div class="subtitle">Software Development Engineer II @ Microsoft</div>
+            <div class="tagline">Stamp 4 | Typing for a living | Currently typing at Microsoft Dublin</div>
+            <div class="cta-buttons">
+                <a href="#projects" class="btn btn-primary">View My Work</a>
+                <a href="https://linkedin.com/in/siddharthdinesh17" class="btn btn-secondary" target="_blank">Connect on LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section fade-in">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>Results-driven Senior Software Development Engineer with a Master's degree in Computer Science from University College Dublin. I bring 7+ years of hands-on experience as a full-stack software developer, specializing in distributed systems, object-oriented design, and providing scalable and performant solutions.</p>
+                <p>Currently working at Microsoft Dublin on Azure Confidential Ledger, incorporating AI Co-Pilot experiences and owning portal experiences for Azure products. Previously led development teams at Mastercard and have extensive experience in .NET Core, React, and cloud technologies.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">7+</div>
+                    <div>Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div>Major Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div>Team Members Led</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3.9</div>
+                    <div>Masters GPA</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects -->
+    <section id="projects" class="section fade-in">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">Azure Confidential Ledger</div>
+                    <div class="project-company">Microsoft</div>
+                    <div class="project-description">Blockchain-based ledger solution for immutable auditing and reliable record keeping. Complete ownership over several modules including design, development, maintenance, and AI Co-Pilot integration.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">C#</span>
+                    <span class="tech-tag">.NET Core</span>
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">C++</span>
+                    <span class="tech-tag">Kubernetes</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">Rebates Platform</div>
+                    <div class="project-company">Mastercard</div>
+                    <div class="project-description">Finance management platform helping banks manage rebates contracts, accruals, incentives, and payouts. Led team of 5 developers and delivered complete workflow creation module.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">C#</span>
+                    <span class="tech-tag">.NET Core</span>
+                    <span class="tech-tag">SQL Server</span>
+                    <span class="tech-tag">DevExtreme</span>
+                    <span class="tech-tag">RESTful API</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">Automated CV Extract</div>
+                    <div class="project-company">Capgemini</div>
+                    <div class="project-description">System processing 500+ resource extractions daily through REST API service. Generated resumes using OpenXML for internal recruitment portal with complete ownership of design and development.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">.NET Core</span>
+                    <span class="tech-tag">SQL Server</span>
+                    <span class="tech-tag">OpenXML</span>
+                    <span class="tech-tag">RESTful API</span>
+                    <span class="tech-tag">jQuery</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">EM Portal</div>
+                    <div class="project-company">Capgemini</div>
+                    <div class="project-description">Web application managing ~5000 demand requests daily with dynamic front-end customization. Delivered 7000+ lines of JavaScript code while mentoring three junior developers.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">.NET Core</span>
+                    <span class="tech-tag">C#</span>
+                    <span class="tech-tag">SQL Server</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">AJAX</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">Fake News Detector</div>
+                    <div class="project-company">University Project</div>
+                    <div class="project-description">Cloud-based ML project analyzing large datasets to detect fake news. Hosted on AWS platform for data storage, processing, and dashboard visualization.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">AWS EC2</span>
+                    <span class="tech-tag">Snowflake</span>
+                    <span class="tech-tag">Hadoop</span>
+                    <span class="tech-tag">Machine Learning</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">Highbrow Tribes</div>
+                    <div class="project-company">Personal Project</div>
+                    <div class="project-description">Platform allowing students to join/create tribes based on GitHub profile matches. Features chat forums using AKKA actor programming and group coding challenges.</div>
+                </div>
+                <div class="project-tech">
+                    <span class="tech-tag">Java</span>
+                    <span class="tech-tag">AKKA</span>
+                    <span class="tech-tag">Hibernate</span>
+                    <span class="tech-tag">REST API</span>
+                    <span class="tech-tag">Docker</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Journey -->
+    <section id="journey" class="section fade-in">
+        <h2 class="section-title">Professional Journey</h2>
+        <div class="journey-timeline">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-title">Software Development Engineer II</div>
+                    <div class="timeline-company">Microsoft, Dublin, Ireland</div>
+                    <div class="timeline-period">February 2025 - Present</div>
+                    <p>• Owned portal experience for Azure Confidential Ledger<br>
+                    • Incorporating AI Co-Pilot experience for Azure products<br>
+                    • Working as Full-stack engineer with React, C#, .NET Core, Cosmos DB, Python & C++</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-title">Senior Software Development Engineer</div>
+                    <div class="timeline-company">Mastercard, Dublin, Ireland</div>
+                    <div class="timeline-period">September 2022 - February 2025</div>
+                    <p>• Led team of 5 developers & 2 QA to deliver key modules<br>
+                    • Incorporated architectural components to improve scalability<br>
+                    • Full-stack development with DevExtreme, C#, .NET Core & SQL</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-title">Master of Science - Computer Science</div>
+                    <div class="timeline-company">University College Dublin</div>
+                    <div class="timeline-period">August 2021 - September 2022</div>
+                    <p>• Achieved 3.9 GPA (First Class Honours)<br>
+                    • Specialized in Distributed Systems, Cloud Computing, Scala Programming<br>
+                    • Focus on Data Programming with Python and Java</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-title">Software Development Engineer Intern</div>
+                    <div class="timeline-company">Groupon, Dublin, Ireland</div>
+                    <div class="timeline-period">May 2022 - August 2022</div>
+                    <p>• Worked with Merchandising Intelligence team<br>
+                    • Front-end development with Vue.js and Backbone.js<br>
+                    • Migration of internal application from Backbone.js to Vue.js</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-title">Associate Consultant</div>
+                    <div class="timeline-company">Capgemini, Mumbai, India</div>
+                    <div class="timeline-period">December 2017 - August 2021</div>
+                    <p>• Full Stack Developer using .NET Core and Agile methodologies<br>
+                    • Managed 3 junior developers on multinational projects<br>
+                    • Automated business processes reducing turnaround time by 80%</p>
+                </div>
+                <div class="timeline-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section fade-in">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Programming Languages</h3>
+                <div class="skill-list">
+                    <span class="skill-item">C#</span>
+                    <span class="skill-item">Java</span>
+                    <span class="skill-item">Python</span>
+                    <span class="skill-item">C++</span>
+                    <span class="skill-item">C</span>
+                    <span class="skill-item">Scala</span>
+                    <span class="skill-item">JavaScript</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Web Development</h3>
+                <div class="skill-list">
+                    <span class="skill-item">React</span>
+                    <span class="skill-item">Vue.js</span>
+                    <span class="skill-item">Angular</span>
+                    <span class="skill-item">React Native</span>
+                    <span class="skill-item">HTML5</span>
+                    <span class="skill-item">CSS</span>
+                    <span class="skill-item">jQuery</span>
+                    <span class="skill-item">DevExtreme</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Frameworks & APIs</h3>
+                <div class="skill-list">
+                    <span class="skill-item">.NET Core</span>
+                    <span class="skill-item">ASP.NET</span>
+                    <span class="skill-item">Web API</span>
+                    <span class="skill-item">MVC</span>
+                    <span class="skill-item">Spring Boot</span>
+                    <span class="skill-item">RESTful API</span>
+                    <span class="skill-item">WCF</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Cloud & DevOps</h3>
+                <div class="skill-list">
+                    <span class="skill-item">Azure</span>
+                    <span class="skill-item">AWS</span>
+                    <span class="skill-item">Docker</span>
+                    <span class="skill-item">Kubernetes</span>
+                    <span class="skill-item">Jenkins</span>
+                    <span class="skill-item">Maven</span>
+                    <span class="skill-item">Git</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Databases</h3>
+                <div class="skill-list">
+                    <span class="skill-item">SQL Server</span>
+                    <span class="skill-item">MySQL</span>
+                    <span class="skill-item">Cosmos DB</span>
+                    <span class="skill-item">Snowflake</span>
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3>Leadership & Soft Skills</h3>
+                <div class="skill-list">
+                    <span class="skill-item">Team Leadership</span>
+                    <span class="skill-item">Agile/Scrum</span>
+                    <span class="skill-item">Mentoring</span>
+                    <span class="skill-item">Architecture Design</span>
+                    <span class="skill-item">Technical Documentation</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Interface -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <span>💬 Ask About Siddharth</span>
+            <button class="chat-close" onclick="toggleChat()">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <p>Hi! I'm Siddharth's AI assistant. Ask me anything about his experience, skills, projects, or career journey! 🚀</p>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Ask about my experience, projects, skills..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(10, 10, 10, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 245, 255, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Chat functionality
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.classList.toggle('active');
+            if (chatContainer.classList.contains('active')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Simulate typing delay and add bot response
+            setTimeout(() => {
+                const response = generateResponse(message.toLowerCase());
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateResponse(message) {
+            // Simple keyword-based responses - in a real implementation, you'd use a proper AI/NLP service
+            const responses = {
+                // Experience and Career
+                experience: "I have 7+ years of professional software development experience, starting from my internship at Uniq Technologies in 2015 to my current role as Software Development Engineer II at Microsoft. I've worked across multiple domains including fintech at Mastercard, e-commerce at Groupon, and now cloud services at Microsoft.",
+                
+                microsoft: "I joined Microsoft Dublin in February 2025 as a Software Development Engineer II. I work on Azure Confidential Ledger, a blockchain-based solution for immutable auditing. I'm also incorporating AI Co-Pilot experiences across Azure products and work with technologies like React, C#, .NET Core, Cosmos DB, Python, and C++.",
+                
+                mastercard: "At Mastercard (2022-2025), I was a Senior Software Development Engineer leading a team of 5 developers and 2 QA engineers. I worked on the Rebates platform, helping banks manage their rebate contracts, accruals, and payouts. I incorporated architectural components to improve scalability and reliability.",
+                
+                capgemini: "I spent almost 4 years at Capgemini (2017-2021) in Mumbai, progressing from Software Engineer to Associate Consultant. I developed multiple full-scale web applications, managed junior developers, and automated business processes, reducing turnaround time by up to 80%.",
+                
+                // Education
+                education: "I have a Master's in Computer Science from University College Dublin (2021-2022) with a 3.9 GPA, specializing in Distributed Systems, Cloud Computing, and Programming with Scala. My Bachelor's is in Computer Science from Saveetha University, India (2013-2017) with First Class distinction.",
+                
+                dublin: "I moved to Dublin, Ireland in 2021 for my Master's degree at UCD and have been working here since. I have Stamp 4 permission and am currently at Microsoft Dublin. Dublin has been an amazing place for my career growth in tech!",
+                
+                // Technical Skills
+                skills: "My core technical skills include C#, .NET Core, React, Python, Java, SQL Server, Azure, AWS, Docker, and Kubernetes. I'm experienced in full-stack development, cloud computing, distributed systems, and team leadership. I work with both frontend (React, Vue.js, Angular) and backend (.NET Core, Web APIs) technologies.",
+                
+                dotnet: "I'm highly experienced in .NET ecosystem - .NET Core, ASP.NET, MVC, Web API, and C#. I've been working with .NET for over 7 years, building scalable web applications, APIs, and enterprise solutions across multiple companies.",
+                
+                react: "I work extensively with React for frontend development, especially in my current role at Microsoft for Azure portal experiences. I also have experience with React Native for mobile development and other frontend frameworks like Vue.js and Angular.",
+                
+                azure: "I currently work with Azure technologies at Microsoft, specifically on Azure Confidential Ledger. I have experience with various Azure services including Cosmos DB, and I'm incorporating AI Co-Pilot experiences into Azure products.",
+                
+                // Projects
+                projects: "Some of my notable projects include Azure Confidential Ledger (Microsoft), Rebates Platform (Mastercard), Automated CV Extract system processing 500+ daily extractions (Capgemini), and EM Portal managing 5000+ daily requests. I've also worked on ML projects like Fake News Detector using AWS.",
+                
+                leadership: "I have strong leadership experience, having led a team of 5 developers and 2 QA engineers at Mastercard. At Capgemini, I mentored 3 junior developers while delivering complex projects. I'm experienced in Agile methodologies, sprint planning, and stakeholder management.",
+                
+                // Personal
+                contact: "You can reach me at siddharth17apr96@gmail.com or connect with me on LinkedIn at linkedin.com/in/siddharthdinesh17. I'm always open to discussing new opportunities and tech collaborations!",
+                
+                github: "You can check out my work on GitHub at github.com/SiddharthUCD where I showcase various projects and contributions.",
+                
+                // Default responses
+                default: "That's a great question! I'm a Software Development Engineer with 7+ years of experience, currently working at Microsoft Dublin. I specialize in full-stack development, cloud technologies, and team leadership. Feel free to ask me about my experience, skills, projects, or career journey!",
+                
+                greeting: "Hello! Thanks for your interest in learning about me. I'm Siddharth, a Software Development Engineer II at Microsoft Dublin with 7+ years of experience in full-stack development. What would you like to know about my background, skills, or projects?"
+            };
+
+            // Check for keywords and return appropriate response
+            if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+                return responses.greeting;
+            } else if (message.includes('microsoft') || message.includes('current job') || message.includes('current role')) {
+                return responses.microsoft;
+            } else if (message.includes('mastercard')) {
+                return responses.mastercard;
+            } else if (message.includes('capgemini')) {
+                return responses.capgemini;
+            } else if (message.includes('experience') || message.includes('career') || message.includes('background')) {
+                return responses.experience;
+            } else if (message.includes('education') || message.includes('degree') || message.includes('university') || message.includes('ucd')) {
+                return responses.education;
+            } else if (message.includes('dublin') || message.includes('ireland')) {
+                return responses.dublin;
+            } else if (message.includes('skills') || message.includes('technologies') || message.includes('tech stack')) {
+                return responses.skills;
+            } else if (message.includes('.net') || message.includes('dotnet') || message.includes('c#')) {
+                return responses.dotnet;
+            } else if (message.includes('react') || message.includes('frontend') || message.includes('javascript')) {
+                return responses.react;
+            } else if (message.includes('azure') || message.includes('cloud')) {
+                return responses.azure;
+            } else if (message.includes('projects') || message.includes('work') || message.includes('portfolio')) {
+                return responses.projects;
+            } else if (message.includes('leadership') || message.includes('team') || message.includes('management')) {
+                return responses.leadership;
+            } else if (message.includes('contact') || message.includes('email') || message.includes('reach')) {
+                return responses.contact;
+            } else if (message.includes('github') || message.includes('code')) {
+                return responses.github;
+            } else {
+                return responses.default;
+            }
+        }
+
+        // Initialize animations on page load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
