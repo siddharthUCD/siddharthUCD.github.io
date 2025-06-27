@@ -110,6 +110,10 @@
             transition: width 0.3s ease;
         }
 
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
         .nav-links a:hover::after {
             width: 100%;
         }
@@ -647,7 +651,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Siddharth</h1>
+            <h1>Siddharth D</h1>
             <div class="subtitle">Typing for a living | Currently typing at Microsoft</div>
             <div class="tagline">📍 Dublin, Ireland</div>
             <div class="cta-buttons">
@@ -961,6 +965,27 @@
                 }
             });
         });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        function updateActiveNavLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveNavLink);
+        window.addEventListener('load', updateActiveNavLink);
 
         // Scroll animations
         const observerOptions = {
